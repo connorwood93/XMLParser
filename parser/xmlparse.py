@@ -47,9 +47,10 @@ class XMLParse(object):
         return
 
     def parseEntry(self, start):
-        end = '</food>'
-        print(self.input[0])
-        while self.input[0] is not end:
+        if not self.input:
+            return
+        end = self.input[-1]
+        while self.input[0] != end:
             self.advance()
             #print(['test', self.input])
             if '=' in self.input[0]:
@@ -60,13 +61,13 @@ class XMLParse(object):
                 self.parseGen()
         self.stmt += ');\n'
         self.advance()
-        if self.input[0] is not None:
+        if not self.input:
             self.parseEle()
         return
 
     def parseEle(self):
-        start = self.input[0]
-        self.stmt += 'INSERT INTO ' + 'VALUES ('
+        start = self.input[0][1:-1]
+        self.stmt += 'INSERT INTO ' + start + ' VALUES ('
         return self.parseEntry(start)
 
     def parse(self):
